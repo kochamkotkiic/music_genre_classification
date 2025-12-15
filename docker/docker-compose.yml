@@ -1,0 +1,20 @@
+services:
+  ml-project:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    container_name: music-genre-classifier
+    volumes:
+      - ..:/app
+      - gtzan_data:/app/data/raw
+      - features_cache:/app/data/processed
+    ports:
+      - "8888:8888"
+    environment:
+      - JUPYTER_ENABLE_LAB=yes
+      - PYTHONUNBUFFERED=1
+    stdin_open: true
+    tty: true
+volumes:
+  gtzan_data:
+  features_cache:
