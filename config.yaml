@@ -1,0 +1,183 @@
+################################################################################
+# config.yaml
+# Configuration for Music Genre Classification Project
+################################################################################
+
+# ============================================================================
+# DATASET CONFIGURATION
+# ============================================================================
+
+dataset:
+  name: "GTZAN"
+  description: "Genre and Artist Collection Music Dataset"
+  
+  # Pobieranie danych
+  download:
+    method: "mirdata"  # Opcje: mirdata, tfds
+    data_dir: "data/raw"
+    auto_download: false
+  
+  # Informacje o dataset'cie
+  info:
+    total_samples: 1000
+    genres: 10
+    genre_list:
+      - blues
+      - classical
+      - country
+      - disco
+      - hiphop
+      - jazz
+      - metal
+      - pop
+      - reggae
+      - rock
+    samples_per_genre: 100
+    duration_per_sample_seconds: 30
+    sample_rate: 22050
+    format: "wav"
+    total_size_gb: 1.2
+
+# ============================================================================
+# AUDIO PROCESSING CONFIGURATION
+# ============================================================================
+
+audio:
+  sample_rate: 22050
+  mono: true  # Konwertuj na mono
+  
+  # Normalizacja
+  normalize:
+    enabled: true
+    method: "minmax"  # min-max normalizacja
+    range: [0, 1]
+
+# ============================================================================
+# FEATURE EXTRACTION CONFIGURATION
+# ============================================================================
+
+features:
+  # MFCC - Mel-Frequency Cepstral Coefficients
+  mfcc:
+    enabled: true
+    n_mfcc: 13
+    n_fft: 2048
+    hop_length: 512
+    n_mels: 128
+  
+  # Spectral Features
+  spectral:
+    enabled: true
+    features:
+      - centroid
+      - rolloff
+      - bandwidth
+      - zero_crossing_rate
+  
+  # Chroma Features
+  chroma:
+    enabled: false
+    n_chroma: 12
+  
+  # Tempo & Beat
+  tempo:
+    enabled: false
+    estimate_tempo: true
+
+# ============================================================================
+# MODEL CONFIGURATION
+# ============================================================================
+
+model:
+  type: "neural_network"  # neural_network, svm, random_forest
+  
+  # Neural Network
+  neural_network:
+    architecture: "dense"  # dense, cnn, rnn
+    layers: [128, 64, 32]
+    activation: "relu"
+    output_activation: "softmax"
+    dropout: 0.3
+  
+  # Training
+  training:
+    epochs: 50
+    batch_size: 32
+    validation_split: 0.2
+    test_split: 0.1
+    optimizer: "adam"
+    loss: "categorical_crossentropy"
+    metrics:
+      - accuracy
+      - precision
+      - recall
+    early_stopping:
+      enabled: true
+      patience: 10
+      monitor: "val_loss"
+  
+  # Regularization
+  regularization:
+    l1: 0.0
+    l2: 0.0001
+    batch_norm: true
+
+# ============================================================================
+# EVALUATION CONFIGURATION
+# ============================================================================
+
+evaluation:
+  metrics:
+    - accuracy
+    - precision
+    - recall
+    - f1_score
+    - confusion_matrix
+    - roc_auc
+  
+  cross_validation:
+    enabled: true
+    folds: 5
+    stratified: true
+  
+  # Visualization
+  plots:
+    confusion_matrix: true
+    roc_curves: true
+    training_history: true
+    genre_distribution: true
+
+# ============================================================================
+# PATHS CONFIGURATION
+# ============================================================================
+
+paths:
+  root: "."
+  data:
+    raw: "data/raw"
+    processed: "data/processed"
+  src: "src"
+  notebooks: "notebooks"
+  results:
+    models: "results/models"
+    figures: "results/figures"
+    metrics: "results/metrics"
+  logs: "logs"
+
+# ============================================================================
+# LOGGING CONFIGURATION
+# ============================================================================
+
+logging:
+  level: "INFO"  # DEBUG, INFO, WARNING, ERROR, CRITICAL
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  file: "logs/music_genre.log"
+  console:
+    enabled: true
+    color: true
+
+# ============================================================================
+# RANDOM SEED (dla reproducibility)
+# ============================================================================
+
+seed: 42
