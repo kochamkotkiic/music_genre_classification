@@ -6,8 +6,9 @@ services:
     container_name: music-genre-classifier
     volumes:
       - ..:/app
-      - gtzan_data:/app/data/raw
-      - features_cache:/app/data/processed
+      - ../data/raw/genres:/app/data/raw/genres
+      - ../data/processed:/app/data/processed
+      - ../models:/app/models
     ports:
       - "8888:8888"
     environment:
@@ -15,6 +16,3 @@ services:
       - PYTHONUNBUFFERED=1
     stdin_open: true
     tty: true
-volumes:
-  gtzan_data:
-  features_cache:
