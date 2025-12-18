@@ -4,7 +4,7 @@ import pandas as pd
 import sys
 import joblib
 
-# Dodaj src do path'u
+
 sys.path.insert(0, str(Path(__file__).parent.parent / 'src'))
 
 from ml_pipeline import GenericScikitLearner
