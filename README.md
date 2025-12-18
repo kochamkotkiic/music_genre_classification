@@ -1,34 +1,39 @@
-# Music Genre Classification
+# 🎵 Music Genre Classification - GTZAN
 
-This project aims to classify music tracks into genres based on audio features extracted from each track. The analysis uses the **GTZAN dataset** from TensorFlow Datasets.
+Klasyfikacja utworów muzycznych na **10 gatunków** z **GTZAN dataset** (1000 nagrań × 30s).
 
-## Project Structure
+## 📁 Struktura Projektu
+├── data/ ← Processed features (train/val/test)
+├── models/ ← knn_model.pkl (57.5% accuracy)
+├── notebooks/ ← EDA + wizualizacje
+├── scripts/ ← Pipeline ML
+├── src/ ← Core ML functions
+└── docker/ ← Environment
 
-- `notebooks/` – Jupyter notebooks for EDA and visualization
-- `src/` – Python scripts for feature extraction and model training
-- `data/` – Instructions for downloading dataset (data not included)
-- `docker/` – Dockerfile and environment setup
-- `README.md` – Project documentation
+# Uruchomienie programu:
+cd ścieżka do projektu/docker
+# Uruchomienie dockera z montowanym folderem (ścieżka do folderu z danymi)
+docker-compose run --rm -v "ścieżka do projektu:/app/data" ml-project bash
 
-## Setup
+# Uruchomienie skryptu:
+Wewnątrz kontenera:
+python scripts/prepare_datasets.py --data-dir "/app/data"
+Wyniki (data/processed) zapisują się w folderze projektu.
+Po wczytaniu danych należu uruchomić kod treningu:
+python scripts/train_knn.py
 
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/yourusername/music_genre_classification.git
-2. Install dependencies:
-   ```bash
-    pip install -r requirements.txt
+## 📊 Wyniki kNN (Baseline)
+✅ Dokładność test: 57.5%
+✅ Classical: 88% F1 (NAJLEPSZY)
+❌ Rock: 22% F1 (NAJGORSZY)
 
-3. Download the GTZAN dataset following instructions in data/README.md.
+## 🔍 Analiza GTZAN Dataset
+- **1000 nagrań**, 10 gatunków × 100 utworów
+- **Średnia długość:** 30s (29.9-30.6s) ✅
+- **RMS Energy:** Classical↓ | Pop/Metal↑
+- **MFCC1:** Energia (Classical niska)
+- **t-SNE:** Classical/Jazz separują się najlepiej
+- **Trudne pary:** Rock↔Country↔Disco
 
-4. Usage
 
-Run the notebooks in notebooks/ to explore the dataset and visualize audio features.
 
-Use scripts in src/ to train classifiers using scikit-learn.
-
-5. Notes
-
-.ipynb_checkpoints are ignored.
-
-Dataset is not included due to size restrictions.
