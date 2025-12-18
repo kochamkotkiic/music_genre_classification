@@ -6,9 +6,6 @@ soundfile==0.13.1
 pandas==2.3.3
 matplotlib==3.10.8
 seaborn==0.13.2
-tensorflow==2.19.1
-tensorflow-datasets==4.9.9
-mirdata==1.0.0
 jupyter==1.1.1
 jupyterlab==4.5.0
 ipython==8.37.0
