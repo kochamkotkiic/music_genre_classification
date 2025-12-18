@@ -45,7 +45,7 @@ def main():
     
     # Utwórz i wytrenuj model kNN
     print("\n🔧 Tworzenie modelu kNN...")
-    knn = KNeighborsClassifier(n_neighbors=5)
+    knn = KNeighborsClassifier(n_neighbors=11)
     model = GenericScikitLearner(knn, name="knn")
     
     print("🏋️ Trening modelu...")
