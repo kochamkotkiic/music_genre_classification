@@ -45,7 +45,11 @@ def main():
     
 
     print("\n Tworzenie modelu kNN...")
-    knn = KNeighborsClassifier(n_neighbors=11)
+    knn = KNeighborsClassifier(
+        n_neighbors=10,      
+        weights='distance',
+        metric='manhattan'
+    )
     model = GenericScikitLearner(knn, name="knn")
     
     print(" Trening modelu...")
@@ -57,19 +61,8 @@ def main():
     print(f"   Dokładność (val): {val_accuracy:.4f}")
     
 
-    print("\n Ocena na zbiorze testowym...")
-    test_pred = model.predict(X_test)
-    test_accuracy = accuracy_score(y_test, test_pred)
-    print(f"   Dokładność (test): {test_accuracy:.4f}")
-    
-
     print("\n Raport klasyfikacji (test):")
-    print(classification_report(y_test, test_pred))
-    
-
-    print("\n Macierz pomyłek (test):")
-    cm = confusion_matrix(y_test, test_pred)
-    print(cm)
+    print(classification_report(y_test, val_pred))
     
 
     model_path = models_dir / 'knn_model.pkl'
