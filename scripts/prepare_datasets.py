@@ -12,7 +12,6 @@ sys.path.insert(0, str(src_path))
 # Załaduj moduły bezpośrednio
 spec_fe = importlib.util.spec_from_file_location("feature_extractor", src_path / "feature_extractor.py")
 spec_ds = importlib.util.spec_from_file_location("dataset_splitter", src_path / "dataset_splitter.py")
-
 feature_extractor_module = importlib.util.module_from_spec(spec_fe)
 dataset_splitter_module = importlib.util.module_from_spec(spec_ds)
 
