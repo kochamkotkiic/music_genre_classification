@@ -1,47 +1,64 @@
-# 🎵 Music Genre Classification - GTZAN
+# 🐱🎧 Klasyfikacja Gatunków Muzycznych (GTZAN)  
 
-Klasyfikacja utworów muzycznych na **10 gatunków** z **GTZAN dataset** (1000 nagrań × 30s).
+Projekt uczenia maszynowego mający na celu automatyczną klasyfikację gatunków muzycznych na podstawie analizy sygnału audio. Wykorzystano zbiór danych **GTZAN** oraz różne algorytmy klasyfikacji (od prostych modeli po sieci neuronowe).
 
-##  Struktura Projektu
-```plaintext
-├── data/          ← przetworzone cechy (train/val/test)
-├── models/        ← knn_model.pkl 
-├── notebooks/     ← EDA + wizualizacje
-├── scripts/       ← wczytanie danych + trening
-├── src/           ← ML funkcje
-└── docker/        ← środowisko
- ```
-**Uruchomienie programu:**
+##  Zbiór Danych i Cechy
+* **Dataset:** GTZAN (1000 utworów, 10 gatunków, po 100 próbek 30-sekundowych).
+* **Gatunki:** Blues, Classical, Country, Disco, Hiphop, Jazz, Metal, Pop, Reggae, Rock.
+* **Ekstrakcja Cech (59 wymiarów):**
+  * **MFCC (13):** Barwa dźwięku.
+  * **Chroma (12):** Cechy harmoniczne.
+  * **Spectral Contrast:** Rozkład energii w pasmach (kluczowe dla Drzew Decyzyjnych).
+  * **RMS Energy:** Głośność/dynamika.
+  * **Zero Crossing Rate:** Hałaśliwość sygnału.
 
-cd ścieżka do projektu/docker
+##  Wyniki Modeli
 
-**Uruchomienie dockera z montowanym folderem (ścieżka do folderu z danymi)**
+Przetestowano 5 głównych podejść. Najlepszym klasycznym modelem okazał się **SVM z jądrem RBF**.
 
-docker-compose run --rm -v "ścieżka do projektu:/app/data" ml-project bash
+| Model | Dokładność (Accuracy) | Kluczowe wnioski |
+| :--- | :---: | :--- |
+| **SVM (RBF)** | **70.5%** | **Zwycięzca.** Świetnie radzi sobie z nieliniowością danych. |
+| **MLP (Neural Net)** | ~69.0% | Wysoki potencjał, ale wymagał precyzyjnego strojenia (architektura piramidalna). |
+| **KNN (k=10)** | 60.0% | Solidny baseline. Dobry dla *Classical*, słaby dla *Rock/Country*. |
+| **Naive Bayes** | 58.0% | Zbyt proste założenia (niezależność cech), problem *High Bias*. |
+| **Decision Tree** | 53.5% | Najsłabszy wynik, ale wysoka interpretowalność. |
 
-**Uruchomienie skryptu:**
+###  Najważniejsze wnioski z analizy (EDA & Modele):
+1.  **Najłatwiejsze do rozróżnienia:** *Classical* i *Jazz* (unikalna dynamika i spektrum).
+2.  **Najtrudniejsze pary:** *Rock* vs *Country* vs *Disco* (podobne instrumentarium i rytmika).
+3.  **Kluczowa cecha:** *Spectral Contrast* okazał się ważniejszy niż MFCC w modelach drzewiastych.
+4.  **Skalowanie:** Standaryzacja (`StandardScaler`) była krytyczna dla wyników PCA i treningu sieci neuronowych.
 
-Wewnątrz kontenera:
-python scripts/prepare_datasets.py --data-dir "/app/data"
+---
 
-Wyniki (data/processed) zapisują się w folderze projektu.
+##  Jak uruchomić projekt
 
-Po wczytaniu danych należu uruchomić kod treningu:
-python scripts/train_knn.py
+### Opcja 1: Docker (Rekomendowane)
+Środowisko jest w pełni skonteryzowane. Wymaga zainstalowanego Dockera.
 
-##  Wyniki kNN (Baseline)
- Dokładność test: 57.5%
- Classical: 88% F1 (NAJLEPSZY)
- Rock: 22% F1 (NAJGORSZY)
+1. Przejdź do folderu `docker`:
+   ```bash
+   cd music_genre_classification/docker
+2. Uruchom kontener z mapowaniem danych (podmień ścieżkę do danych GTZAN):
+   ```bash
+   docker-compose run --rm -p 8888:8888 -v "C:\Sciezka\Do\Danych\GTZAN:/app/data" ml-project
+3. Jupyter Lab uruchomi się na porcie 8888. Token znajdziesz w konsoli.
+### Opcja 2: Lokalnie (Python 3.10+)
+1. Zainstaluj wymagane biblioteki:
+   ```bash
+   pip install -r docker/requirements.txt
+2. Uruchom Jupyter Lab w folderze projektu:
+   ```bash
+    jupyter lab
+   
+###  Struktura Projektu
+data/ - Miejsce na przetworzone dane.
 
-##  Analiza GTZAN Dataset
-- **1000 nagrań**, 10 gatunków × 100 utworów
-- **Średnia długość:** 30s (29.9-30.6s) 
-- **RMS Energy:** Classical↓ | Pop/Metal↑
-- **MFCC1:** Energia (Classical niska)
-- **t-SNE:** Classical/Jazz separują się najlepiej
-- **Trudne pary:** Rock↔Country↔Disco
+docker/ - Pliki konfiguracyjne Dockerfile i docker-compose.
 
+notebooks/ - Notatniki Jupyter z kodem (EDA, Trening modeli).
 
+scripts/ - Skrypty pomocnicze (feature_extractor.py, prepare_datasets.py).
 
-
+models/ - Zapisane wytrenowane modele .pkl. 
