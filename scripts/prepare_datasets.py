@@ -85,7 +85,7 @@ def main():
     print(f"    Val:   {len(val_df)} próbek → {val_path}")
     print(f"    Test:  {len(test_df)} próbek → {test_path}")
 
-    print(f"📊 Statystyka: {features_df.shape[0]} próbek, {features_df.shape[1] - 2} cech")
+    print(f" Statystyka: {features_df.shape[0]} próbek, {features_df.shape[1] - 2} cech")
 
 
 if __name__ == '__main__':

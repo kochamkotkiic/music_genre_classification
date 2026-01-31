@@ -68,7 +68,7 @@ class FeatureExtractor:
             return features
             
         except Exception as e:
-            print(f"❌ Błąd przy {file_path}: {e}")
+            print(f" Błąd przy {file_path}: {e}")
             return None
     
     def get_file_list(self, data_dir: Path) -> List[Dict]:
@@ -93,14 +93,14 @@ class FeatureExtractor:
                             'genre': genre
                         })
         
-        print(f"📁 Znaleziono {len(files)} plików audio w {len(set(f['genre'] for f in files))} gatunkach")
+        print(f" Znaleziono {len(files)} plików audio w {len(set(f['genre'] for f in files))} gatunkach")
         return files
     
     def extract_from_directory(self, data_dir: Path) -> pd.DataFrame:
         """Wyodrębnij cechy ze wszystkich plików"""
         files = self.get_file_list(data_dir)
         
-        print(f"🔄 Wyodrębniam cechy z {len(files)} plików...")
+        print(f" Wyodrębniam cechy z {len(files)} plików...")
         results = []
         
         for i, file_info in enumerate(files):
@@ -114,5 +114,5 @@ class FeatureExtractor:
                 print(f"  ✓ {i+1}/{len(files)} plików przetworzonych")
         
         df = pd.DataFrame(results)
-        print(f"✅ Wyodrębniono {len(df)} próbek x {len(df.columns)-2} cech")
+        print(f" Wyodrębniono {len(df)} próbek x {len(df.columns)-2} cech")
         return df

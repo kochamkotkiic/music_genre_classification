@@ -25,7 +25,7 @@ class DatasetSplitter:
             random_state=random_state
         )
         
-        print(f"📊 Podział zbiorów:")
+        print(f" Podział zbiorów:")
         print(f"  Train: {len(train):4} próbek ({len(train)/len(df)*100:.1f}%)")
         print(f"  Val:   {len(val):4} próbek ({len(val)/len(df)*100:.1f}%)")
         print(f"  Test:  {len(test):4} próbek ({len(test)/len(df)*100:.1f}%)")
